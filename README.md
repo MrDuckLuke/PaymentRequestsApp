@@ -35,7 +35,7 @@ Esta solución está diseñada para ser funcional de inmediato sin configuracion
           y ejecutando "Update-Database". 
 
   3. Ejecución: Presione F5. La interfaz que se mostrará originalmente es la del Frontend. La documentación de la API con Swagger está disponible en "https://localhost:XXXX/swagger/index.html" (Sustituir
-     la XXXX por el puerto asignado. Al abrir la interfaz de Swagger, se podrá visualizar los endpoints:
+     la XXXX por el puerto asignado). Al abrir la interfaz de Swagger, se podrá visualizar los endpoints:
 
         - GET /api/PaymentRequest: Lista todas las solicitudes.
         - POST /api/PaymentRequest: Registra una nueva solicitud.
