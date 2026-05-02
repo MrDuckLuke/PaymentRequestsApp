@@ -49,7 +49,6 @@ B. Instrucciones de ejecución:
             - Desde el formulario podrá registrar nuevos pagos. La tabla inferior se actualizará automáticamente mediante peticiones fetch.
    
    Notas Técnicas adicionales:
-   
-      - Arquitectura: Se implementó un patrón de capas (Controller -> Service -> Repository) respetando el principio de responsabilidad única (SRP).
-      - Persistencia: Se utilizó Entity Framework Core con el proveedor SQLite para garantizar la portabilidad total del examen sin dependencia de un servidor SQL Server externo.
-      - Validaciones: El modelo incluye validaciones mediante Data Annotations que son validadas automáticamente por el ModelState en el controlador.
+         - Arquitectura: Se implementó un patrón de capas (Controller -> Service -> Repository) respetando el principio de responsabilidad única (SRP).
+         - Persistencia: Se utilizó Entity Framework Core con el proveedor SQLite para garantizar la portabilidad total del examen sin dependencia de un servidor SQL Server externo.
+         - Validaciones: El modelo incluye validaciones mediante Data Annotations que son validadas automáticamente por el ModelState en el controlador.
