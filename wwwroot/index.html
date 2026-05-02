@@ -1,0 +1,165 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Pagos - Examen Técnico</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .card {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 2px 2px 10px #eee;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+            button:disabled {
+                background: #ccc;
+                cursor: not-allowed;
+            }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Nueva Solicitud de Pago</h2>
+        <form id="paymentForm">
+            <div class="form-group">
+                <label>Nombre del Solicitante</label>
+                <input type="text" id="requesterName" required>
+            </div>
+            <div class="form-group">
+                <label>Monto</label>
+                <input type="number" id="amount" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <label>Moneda</label>
+                <select id="currency">
+                    <option value="MXN">MXN</option>
+                    <option value="USD">USD</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Descripción</label>
+                <input type="text" id="description">
+            </div>
+            <button type="submit" id="btnRegistrar">Registrar Pago</button>
+        </form>
+    </div>
+    <h3>Historial</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Monto</th>
+                <th>Moneda</th>
+                <th>Descripcion</th>
+            </tr>
+        </thead>
+        <tbody id="listaPagos"></tbody> <!--Aquí coloca los datos-->
+    </table>
+    <script>
+        const API_URL = '/api/payment-requests';
+        const form = document.getElementById('paymentForm');
+        const btn = document.getElementById('btnRegistrar');
+        const tabla = document.getElementById('listaPagos');
+
+        async function cargarPagos() {
+            tabla.innerHTML = '<tr><td colspan="4">Cargando...</td></tr>';
+            const res = await fetch(API_URL);
+            const datos = await res.json();
+
+            tabla.innerHTML = datos.map(p => `
+                    <tr>
+                        <td>${p.id}</td>
+                        <td>${p.requesterName}</td>
+                        <td>$${p.amount}</td>
+                        <td>${p.currency}</td>
+                        <td>${p.description}</td>
+                    </tr>
+                `).join('');
+        }
+
+        // 2. Evento al enviar el formulario
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+
+            // Estado de carga
+            btn.disabled = true; 
+            btn.innerText = 'Enviando...';
+
+            const nuevoPago = {
+                requesterName: document.getElementById('requesterName').value,
+                amount: parseFloat(document.getElementById('amount').value),
+                currency: document.getElementById('currency').value,
+                description: document.getElementById('description').value
+            };
+
+            await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(nuevoPago)
+            });
+
+            // Finalizar estado de carga
+            form.reset();
+            await cargarPagos();
+            btn.disabled = false;
+            btn.innerText = 'Registrar Pago';
+        };
+
+        // Ejecutar carga inicial
+        cargarPagos();
+    </script>
+</body>
+</html>
