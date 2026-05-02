@@ -1,10 +1,16 @@
 using Microsoft.EntityFrameworkCore;
 using PaymentRequestsApp.Data;
+using PaymentRequestsApp.Interfaces;
+using PaymentRequestsApp.Repositories;
+using PaymentRequestsApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IPaymentRequestRepository, PaymentRequestRepository>();
+builder.Services.AddScoped<IPaymentRequestService, PaymentRequestService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
